@@ -13,6 +13,7 @@ const routes = [
     path: '/',
     // component: Login
     component: () => import('@/views/layout'),
+    redirect: 'home',
     children: [
       {
         path: 'home',

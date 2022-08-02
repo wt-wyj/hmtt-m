@@ -23,6 +23,7 @@ export default {
   methods: {
     logout() {
       this.$store.commit('SET_TOKEN', {})
+      this.$router.push('./login')
     }
   }
 }
