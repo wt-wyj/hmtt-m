@@ -9,6 +9,7 @@
         @search="onSearch"
         @focus="onSearchFocus"
         placeholder="请输入搜索关键词"
+        @cancel="$router.back()"
       />
     </form>
     <!-- <SearchHistory></SearchHistory>
