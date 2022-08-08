@@ -27,3 +27,23 @@ export const getCodeAPI = (mobile) => {
     data: { mobile }
   })
 }
+export const getUserInfo = () => {
+  return request({
+    url: '/v1_0/user/profile'
+  })
+}
+
+export const updateUserPhoto = (data) => {
+  return request({
+    url: '/v1_0/user/photo',
+    method: 'PATCH',
+    data
+  })
+}
+export const updateUserProfile = (data) => {
+  return request({
+    method: 'PATCH',
+    url: '/v1_0/user/profile',
+    data
+  })
+}

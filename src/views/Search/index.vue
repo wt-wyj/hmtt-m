@@ -7,54 +7,83 @@
         background="#5094f3"
         show-action
         @search="onSearch"
-        @focus="onSearchFocus"
+        @focus="isResultShow = false"
         placeholder="请输入搜索关键词"
         @cancel="$router.back()"
       />
     </form>
-    <!-- <SearchHistory></SearchHistory>
-    <SearchResult></SearchResult>
-    <SearchSuggestions></SearchSuggestions> -->
-    <components :is="componentName" :keywords="keywords"></components>
+    <SearchResult v-if="isResultShow" :keywords="keywords"></SearchResult>
+
+    <SearchSuggestion
+      v-else-if="keywords"
+      :keywords="keywords"
+      @search="onSearch"
+    ></SearchSuggestion>
+
+    <SearchHistory
+      v-else
+      :search-histories="searchHistories"
+      @clear-search-histories="searchHistories = []"
+      @search="onSearch"
+    ></SearchHistory>
+
+    <!-- <components :is="componentName" :keywords="keywords"></components> -->
   </div>
 </template>
 
 <script>
-import SearchHistory from './components/SearchHistory.vue'
-import SearchResult from './components/SearchResult.vue'
-import SearchSuggestions from './components/SearchSuggestions.vue'
+import SearchHistory from './components/search-history.vue'
+import SearchResult from './components/search-result.vue'
+import SearchSuggestion from './components/search-suggestion.vue'
+// import { setItem } from '@/utils/storage'
+
 export default {
   name: 'Search',
   components: {
     SearchHistory,
     SearchResult,
-    SearchSuggestions
+    SearchSuggestion
   },
 
   computed: {
-    componentName() {
-      if (this.keywords === '') {
-        return 'SearchHistory'
-      } else if (this.isShowSearchResult) {
-        return 'SearchResult'
-      } else {
-        return 'searchSuggestions'
-      }
-    }
+    // componentName() {
+    //   if (this.keywords === '') {
+    //     return 'SearchHistory'
+    //   } else if (this.isResultShow) {
+    //     return 'SearchResult'
+    //   } else {
+    //     return 'SearchSuggestion'
+    //   }
+    // }
   },
   data() {
     return {
       keywords: '',
-      isShowSearchResult: false
+      isResultShow: false,
+      searchHistories: JSON.parse(localStorage.getItem('searchHistory')) || []
     }
   },
+  // watch: {
+  //   searchHistories(value) {
+  //     setItem(this.token, value)
+  //   }
+  // },
   methods: {
     onSearch() {
       console.log(111111)
-      this.isShowSearchResult = true
-    },
-    onSearchFocus() {
-      this.isShowSearchResult = false
+      // this.keywords = val
+      // const index = this.searchHistories.indexOf(val)
+      // this.SearchHistory.unshift(this.keyword)
+
+      // if (index !== 1) {
+      //   this.searchHistories.splice(index, 1)
+      // }
+      this.searchHistories.unshift(this.keywords)
+      this.isResultShow = true
+      localStorage.setItem(
+        'searchHistory',
+        JSON.stringify(this.searchHistories)
+      )
     }
   }
 }
